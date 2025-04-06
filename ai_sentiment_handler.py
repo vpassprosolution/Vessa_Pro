@@ -85,7 +85,7 @@ async def show_sentiment_instruments(update, context):
             keyboard.append(row)
 
     keyboard.append([InlineKeyboardButton("⬅️ Back to Category", callback_data="vessa_ai_sentiment")])
-    await safe_replace_message(query, context, "📈 *Choose an instrument:*", InlineKeyboardMarkup(keyboard))
+    await safe_replace_message(query, context, "📈 *Choose ur favourite instrument:*", InlineKeyboardMarkup(keyboard))
 
 # ✅ Get Sentiment from API
 async def fetch_sentiment(update, context):
