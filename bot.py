@@ -92,6 +92,7 @@ def main():
     app.add_handler(CallbackQueryHandler(setup_menu, pattern="^setup_menu$"))
     app.add_handler(CallbackQueryHandler(show_language_menu, pattern="^language_menu$"))
     app.add_handler(CallbackQueryHandler(set_language, pattern="^set_lang_"))
+    app.add_handler(CallbackQueryHandler(coming_soon, pattern="^coming_soon$"))
 
     # ✅ Registration
     app.add_handler(CallbackQueryHandler(confirm_phone_number, pattern="confirm_phone"))

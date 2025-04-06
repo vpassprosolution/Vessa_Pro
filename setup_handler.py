@@ -19,7 +19,7 @@ async def setup_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
 
     await query.message.edit_text(
-        "⚙️CHOOSE YOUR SETUP MENU⚙️",
+        "⚙️  CHOOSE YOUR SETUP MENU  ⚙️",
         parse_mode="HTML",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )

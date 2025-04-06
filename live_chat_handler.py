@@ -26,8 +26,8 @@ async def handle_live_chat_entry(update: Update, context: ContextTypes.DEFAULT_T
     active_live_chat_users.add(user_id)
 
     await query.message.edit_text(
-        "🤖 You are now connected to VESSA Live Chat.\n\nAsk me anything below 👇\n\n"
-        "❌ All chats auto-delete after 10 seconds.",
+        "🤖 You are connected to VESSA Live Chat.\n\n📝All chats auto-delete after 10sec\n\n"
+        "Ask me anything about vessa pro below 👇",
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton("🔙 Exit Live Chat", callback_data="live_chat_exit")]
         ])
@@ -87,7 +87,7 @@ async def exit_live_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Go back to setup
     await query.message.edit_text(
-        "🔙 Returned to SETUP MENU.",
+        "⚙️  CHOOSE YOUR SETUP MENU  ⚙️",
         reply_markup=InlineKeyboardMarkup([
             [
                 InlineKeyboardButton("🌐 Language", callback_data="language_menu"),
