@@ -1,13 +1,10 @@
 import psycopg2
 import os
-from dotenv import load_dotenv
-load_dotenv()
 
-DB_URL = os.getenv("DB_URL")
+DB_URL = os.environ.get("DB_URL")
 print(f"📍 CURRENT DB_URL IN USE = {DB_URL}")
 
 def connect_db():
-    """Connects to the PostgreSQL database and returns the connection."""
     try:
         conn = psycopg2.connect(DB_URL)
         return conn
@@ -16,12 +13,10 @@ def connect_db():
         return None
 
 def create_table():
-    """Creates the full users table if it doesn't exist with all required columns."""
     conn = connect_db()
     if conn:
         try:
             cur = conn.cursor()
-
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS users (
                     user_id BIGINT PRIMARY KEY,
@@ -46,7 +41,6 @@ def create_table():
                     is_mt5_valid BOOLEAN DEFAULT FALSE
                 );
             """)
-
             conn.commit()
             cur.close()
             conn.close()
@@ -54,10 +48,5 @@ def create_table():
         except Exception as e:
             print("❌ Error creating/updating table:", e)
 
-
-
-
-
-# Run this once only if you want to create/update structure
 if __name__ == "__main__":
     create_table()

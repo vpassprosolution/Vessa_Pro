@@ -390,7 +390,7 @@ translations = {
     "hi": "🏠 मुख्य मेनू"
 },
 "technical_category_title": {
-    "en": "📊 *Select a Market Category:*",
+    "en": " *Select a Market Instruments Category:*",
     "ms": "📊 *Pilih Kategori Pasaran:*",
     "id": "📊 *Pilih Kategori Pasar:*",
     "th": "📊 *เลือกหมวดหมู่ตลาด:*",
