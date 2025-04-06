@@ -26,7 +26,7 @@ from ai_sentiment_handler import (
     show_sentiment_instruments,
     fetch_sentiment
 )
-from setup_handler import setup_menu, coming_soon
+from setup_handler import setup_menu, coming_soon, support_info  # ← add support_info here
 from start_handler import start, start_vpass_pro
 from social_media import social_media
 from channel_verification import check_membership, verify_active_membership
@@ -93,6 +93,7 @@ def main():
     app.add_handler(CallbackQueryHandler(show_language_menu, pattern="^language_menu$"))
     app.add_handler(CallbackQueryHandler(set_language, pattern="^set_lang_"))
     app.add_handler(CallbackQueryHandler(coming_soon, pattern="^coming_soon$"))
+    app.add_handler(CallbackQueryHandler(support_info, pattern="^support_info$"))
 
     # ✅ Registration
     app.add_handler(CallbackQueryHandler(confirm_phone_number, pattern="confirm_phone"))
