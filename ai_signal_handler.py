@@ -3,8 +3,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler
 import asyncio
 from language_handler import get_text
+from utils import check_daily_limit
 
-# AI API URL (Replace with your actual Railway URL)
 AI_API_URL = "https://aiagentinstantsignal-production.up.railway.app"
 
 # Cooldown reset
@@ -25,10 +25,23 @@ async def fetch_ai_signal(update: Update, context: CallbackContext):
     user_id = query.from_user.id
     get = lambda key: get_text(user_id, key, context)
 
+    # ✅ Check Daily Limit
+    if not check_daily_limit(user_id):
+        await query.message.edit_text(
+            "🚫 You’ve reached your *daily limit* of 10 signals.\n\n💎 Upgrade to *Premium* for unlimited access.",
+            parse_mode="Markdown",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton(get("btn_back"), callback_data="ai_agent_signal")]
+            ])
+        )
+        return
+
+    # ✅ Extract Instrument
     selected_instrument = query.data.replace("ai_signal_", "")
     if selected_instrument == "XAU":
         selected_instrument = "XAUUSD"
 
+    # ✅ Fetch from Backend
     try:
         async with httpx.AsyncClient(timeout=10) as client:
             response = await client.get(f"{AI_API_URL}/get_signal/{selected_instrument}")
@@ -49,6 +62,7 @@ async def fetch_ai_signal(update: Update, context: CallbackContext):
         reply_markup=reply_markup,
         parse_mode="Markdown"
     )
+
 
 # ✅ Function to show instrument selection buttons
 async def show_instruments(update: Update, context: CallbackContext):
