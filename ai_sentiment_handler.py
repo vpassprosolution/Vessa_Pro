@@ -12,10 +12,10 @@ category_map = {
     "sentiment_index": "Index"
 }
 
-# ✅ Instrument Maps
+# ✅ Instrument Maps (unchanged original format)
 instrument_map = {
     "sentiment_metals": {
-        "XAU": "Gold",  # Top solo
+        "XAU": "Gold",
         "XAG": "Silver", "XCU": "Copper", "XPT": "Platinum",
         "XPD": "Palladium", "ALU": "Aluminum", "ZNC": "Zinc",
         "NI": "Nickel", "TIN": "Tin", "LEAD": "Lead"
@@ -63,12 +63,12 @@ async def show_sentiment_instruments(update, context):
     keyboard = []
 
     if category == "sentiment_metals":
-        # Gold first
-        keyboard.append([InlineKeyboardButton("🥇 Gold", callback_data="get_sentiment|sentiment_metals|XAU")])
+        # Solo Gold first
+        keyboard.append([InlineKeyboardButton("🥇 GOLD", callback_data="get_sentiment|sentiment_metals|XAU")])
         remaining = {k: v for k, v in instruments.items() if k != "XAU"}
         row = []
         for idx, (symbol, label) in enumerate(remaining.items(), 1):
-            row.append(InlineKeyboardButton(label, callback_data=f"get_sentiment|{category}|{symbol}"))
+            row.append(InlineKeyboardButton(label.upper(), callback_data=f"get_sentiment|{category}|{symbol}"))
             if idx % 3 == 0:
                 keyboard.append(row)
                 row = []
@@ -77,7 +77,7 @@ async def show_sentiment_instruments(update, context):
     else:
         row = []
         for idx, (symbol, label) in enumerate(instruments.items(), 1):
-            row.append(InlineKeyboardButton(label, callback_data=f"get_sentiment|{category}|{symbol}"))
+            row.append(InlineKeyboardButton(label.upper(), callback_data=f"get_sentiment|{category}|{symbol}"))
             if idx % 4 == 0:
                 keyboard.append(row)
                 row = []
