@@ -87,12 +87,21 @@ async def fetch_sentiment(update, context):
 
         if "sentiment" in data:
             keyboard = [[InlineKeyboardButton("⬅️ Back to Category", callback_data=category)]]
-            await query.message.edit_text(data["sentiment"], reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+
+            # ✅ Escape markdown before sending
+            escaped_text = escape_markdown(data["sentiment"])
+
+            await query.message.edit_text(
+                escaped_text,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode=ParseMode.MARKDOWN_V2  # ✅ Use correct parse mode
+            )
         else:
             await query.message.edit_text("⚠️ Failed to get sentiment data.")
 
     except Exception as e:
         await query.message.edit_text(f"❌ Error fetching sentiment: {e}")
+
 
 
 
