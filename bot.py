@@ -43,8 +43,13 @@ from utils import safe_replace_message
 
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, JobQueue
 
-# ✅ Bot Token
-BOT_TOKEN = "7919969905:AAFPL4crDH-hgYtoBsEQ2zURnkm5pXQ0wPo"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# ✅ Secure Bot Token from Railway or .env
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
 
 # ✅ Step tracking
 user_steps = {}
