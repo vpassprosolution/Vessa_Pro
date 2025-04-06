@@ -2,6 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler
 import httpx
 from utils import safe_replace_message  # make sure this exists in your utils.py
+import html
 
 # ✅ Category Maps
 category_map = {
@@ -71,6 +72,7 @@ async def show_sentiment_instruments(update, context):
     await safe_replace_message(query, "📈 Choose an instrument:", InlineKeyboardMarkup(keyboard))
 
 
+
 # ✅ Get Sentiment from API
 async def fetch_sentiment(update, context):
     query = update.callback_query
@@ -88,20 +90,18 @@ async def fetch_sentiment(update, context):
         if "sentiment" in data:
             keyboard = [[InlineKeyboardButton("⬅️ Back to Category", callback_data=category)]]
 
-            # ✅ Escape markdown before sending
-            escaped_text = escape_markdown(data["sentiment"])
+            # ✅ Escape for HTML safely
+            safe_text = html.escape(data["sentiment"])
 
             await query.message.edit_text(
-                escaped_text,
+                safe_text,
                 reply_markup=InlineKeyboardMarkup(keyboard),
-                parse_mode=ParseMode.MARKDOWN_V2  # ✅ Use correct parse mode
+                parse_mode="HTML"
             )
         else:
             await query.message.edit_text("⚠️ Failed to get sentiment data.")
 
     except Exception as e:
         await query.message.edit_text(f"❌ Error fetching sentiment: {e}")
-
-
 
 
