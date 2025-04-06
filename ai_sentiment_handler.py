@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler
 import httpx
-from utils import safe_replace_message  # make sure this exists in your utils.py
+from utils import safe_replace_message  # ✅ Using stable version with context
 import html
 
 # ✅ Category Maps
@@ -48,7 +48,7 @@ async def show_sentiment_categories(update, context):
          InlineKeyboardButton("🟥 Index", callback_data="sentiment_index")],
         [InlineKeyboardButton("⬅️ Back to Menu", callback_data="main_menu")]
     ]
-    await safe_replace_message(query, "📊 Choose a sentiment category:", InlineKeyboardMarkup(keyboard))
+    await safe_replace_message(query, context, "📊 Choose a sentiment category:", InlineKeyboardMarkup(keyboard))
 
 
 # ✅ Show Instruments
@@ -69,15 +69,14 @@ async def show_sentiment_instruments(update, context):
 
     keyboard.append([InlineKeyboardButton("⬅️ Back to Category", callback_data="vessa_ai_sentiment")])
 
-    await safe_replace_message(query, "📈 Choose an instrument:", InlineKeyboardMarkup(keyboard))
-
+    await safe_replace_message(query, context, "📈 Choose an instrument:", InlineKeyboardMarkup(keyboard))
 
 
 # ✅ Get Sentiment from API
 async def fetch_sentiment(update, context):
     query = update.callback_query
     _, category, symbol = query.data.split("|")
-    await safe_replace_message(query, "🧠 Generating AI Sentiment...")
+    await safe_replace_message(query, context, "🧠 Generating AI Sentiment...")
 
     try:
         async with httpx.AsyncClient(timeout=30) as client:
@@ -89,19 +88,13 @@ async def fetch_sentiment(update, context):
 
         if "sentiment" in data:
             keyboard = [[InlineKeyboardButton("⬅️ Back to Category", callback_data=category)]]
-
-            # ✅ Escape for HTML safely
-            safe_text = html.escape(data["sentiment"])
-
             await query.message.edit_text(
-                safe_text,
+                data["sentiment"],
                 reply_markup=InlineKeyboardMarkup(keyboard),
-                parse_mode="HTML"
+                parse_mode="Markdown"
             )
         else:
             await query.message.edit_text("⚠️ Failed to get sentiment data.")
 
     except Exception as e:
         await query.message.edit_text(f"❌ Error fetching sentiment: {e}")
-
-
