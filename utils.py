@@ -20,24 +20,18 @@ def check_daily_limit(user_id: int) -> bool:
 
         is_premium, usage_count, last_used = result
 
+        print(f"🔥 Daily Check: user={user_id} | premium={is_premium} | count={usage_count} | last={last_used}")
+
         if is_premium:
-            return True  # Unlimited for premium
+            return True  # ✅ Premium user unlimited
 
         if last_used == today:
             if usage_count >= 10:
                 return False
             else:
-                cur.execute("""
-                    UPDATE users 
-                    SET usage_count = usage_count + 1 
-                    WHERE user_id = %s
-                """, (user_id,))
+                cur.execute("UPDATE users SET usage_count = usage_count + 1 WHERE user_id = %s", (user_id,))
         else:
-            cur.execute("""
-                UPDATE users 
-                SET usage_count = 1, last_used_date = %s 
-                WHERE user_id = %s
-            """, (today, user_id))
+            cur.execute("UPDATE users SET usage_count = 1, last_used_date = %s WHERE user_id = %s", (today, user_id))
 
         conn.commit()
         return True
@@ -48,7 +42,6 @@ def check_daily_limit(user_id: int) -> bool:
 
     finally:
         conn.close()
-
 
 
 
