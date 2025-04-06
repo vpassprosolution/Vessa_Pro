@@ -1,16 +1,16 @@
 import html
 
 async def safe_replace_message(query, *args, **kwargs):
-    # Extract params
     context = None
     text = None
     reply_markup = None
     parse_mode = "HTML"
 
-    if len(args) == 2:  # Old version: (query, context, text, reply_markup)
+    # Support both formats
+    if len(args) == 2:  # (context, text)
         context = args[0]
         text = args[1]
-    elif len(args) == 1:  # New version: (query, text)
+    elif len(args) == 1:  # (text only)
         text = args[0]
 
     if "reply_markup" in kwargs:
@@ -26,8 +26,14 @@ async def safe_replace_message(query, *args, **kwargs):
         )
     except Exception as e:
         try:
-            # Use context if exists, else fallback to query.message.bot
-            bot = context.bot if context else query.message.bot
+            # Fallback bot
+            if context and hasattr(context, "bot"):
+                bot = context.bot
+            elif hasattr(query, "message") and hasattr(query.message, "chat_id"):
+                bot = query._bot  # Safe fallback from telegram.ext
+            else:
+                raise Exception("Bot instance not found")
+
             await bot.send_message(
                 chat_id=query.message.chat_id,
                 text=html.escape(text),
