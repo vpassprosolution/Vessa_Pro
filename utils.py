@@ -1,3 +1,6 @@
+import html
+from telegram import InlineKeyboardMarkup
+
 async def safe_replace_message(query, context, text, reply_markup=None, parse_mode="HTML"):
     try:
         await query.edit_message_text(
