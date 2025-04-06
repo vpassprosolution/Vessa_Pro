@@ -57,11 +57,17 @@ async def fetch_ai_signal(update: Update, context: CallbackContext):
     keyboard = [[InlineKeyboardButton(get("btn_back"), callback_data="ai_agent_signal")]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    await query.message.edit_text(
-        formatted_message,
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
-    )
+    # ✅ Try to edit safely (avoid Message Not Modified)
+    try:
+        await query.message.edit_text(
+            formatted_message,
+            reply_markup=reply_markup,
+            parse_mode="Markdown"
+        )
+    except Exception as e:
+        if "Message is not modified" not in str(e):
+            print(f"❌ Failed to edit message: {e}")
+
 
 
 # ✅ Function to show instrument selection buttons
