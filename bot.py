@@ -1,7 +1,7 @@
 import asyncio
 import ai_signal_handler
 from ai_technical_handler import show_categories, show_technical_instruments, show_timeframes, fetch_chart
-from ai_sentiment_handler import register_ai_sentiment_handlers
+
 from auto_copy_handler import auto_copy_menu, subscribe_copy, unsubscribe_copy
 from subscription_handler import (
     show_instruments as show_smart_signal_instruments,
@@ -111,7 +111,7 @@ def main():
     # ✅ AI Sentiment (NEW)
     app.add_handler(CallbackQueryHandler(show_sentiment_categories, pattern="^vessa_ai_sentiment$"))
     app.add_handler(CallbackQueryHandler(show_sentiment_instruments, pattern="^sentiment_"))
-    app.add_handler(CallbackQueryHandler(fetch_sentiment, pattern="^get_sentiment\|"))
+    app.add_handler(CallbackQueryHandler(fetch_sentiment, pattern="^get_sentiment\\|"))
     
     # ✅ Start Bot
     print("✅ Bot is running...")
