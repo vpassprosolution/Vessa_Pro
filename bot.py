@@ -26,7 +26,7 @@ from ai_sentiment_handler import (
     show_sentiment_instruments,
     fetch_sentiment
 )
-from setup_handler import setup_menu, coming_soon, support_info  # ← add support_info here
+from setup_handler import setup_menu, coming_soon, support_info
 from start_handler import start, start_vpass_pro
 from social_media import social_media
 from channel_verification import check_membership, verify_active_membership

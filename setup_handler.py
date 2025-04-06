@@ -13,7 +13,7 @@ async def setup_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ],
         [
             InlineKeyboardButton("💬 Live Chat", callback_data="live_chat"),
-            InlineKeyboardButton("🛠️ Support", callback_data="support_info")  # ✅ Updated to callback
+            InlineKeyboardButton("🛠️ Support", callback_data="support_info")  # ✅ use callback not url
         ],
         [InlineKeyboardButton("🔙 Back", callback_data="main_menu")]
     ]
@@ -24,7 +24,6 @@ async def setup_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
-
 # 🚧 COMING SOON
 async def coming_soon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -34,27 +33,26 @@ async def coming_soon(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back", callback_data="setup_menu")]])
     )
 
-
-# ✅ SUPPORT INFO
+# 🛠️ SUPPORT INFO
 async def support_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    text = (
+    support_text = (
         "🛠️ *VESSA PRO SUPPORT*\n\n"
         "If you’re facing any issue, we’re here to help you.\n\n"
         "📩 You can email us directly:\n"
-        "*support@vessapro.com*\n\n"
+        "[support@vessapro.com](mailto:support@vessapro.com)\n\n"
         "🧠 Please describe your issue in detail so our team can assist you better."
     )
 
     keyboard = [
-        [InlineKeyboardButton("✉️ Email Support", url="mailto:support@vessapro.com")],
         [InlineKeyboardButton("🔙 Back", callback_data="setup_menu")]
     ]
 
     await query.message.edit_text(
-        text,
+        support_text,
         parse_mode="Markdown",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        reply_markup=InlineKeyboardMarkup(keyboard),
+        disable_web_page_preview=True
     )
