@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DB_URL = os.getenv("DB_URL")
+print(f"📍 CURRENT DB_URL IN USE = {DB_URL}")
 
 def connect_db():
     """Connects to the PostgreSQL database and returns the connection."""
@@ -52,6 +53,10 @@ def create_table():
             print("✅ Table created or updated successfully.")
         except Exception as e:
             print("❌ Error creating/updating table:", e)
+
+
+
+
 
 # Run this once only if you want to create/update structure
 if __name__ == "__main__":
