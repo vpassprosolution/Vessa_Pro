@@ -53,29 +53,39 @@ async def show_sentiment_categories(update, context):
          InlineKeyboardButton(" INDEX", callback_data="sentiment_index")],
         [InlineKeyboardButton("⬅️ Back to Menu", callback_data="main_menu")]
     ]
-    await safe_replace_message(query, context, "📊 Choose a sentiment category:", InlineKeyboardMarkup(keyboard))
-
+    await safe_replace_message(query, context, "📊 *Choose a sentiment category:*", InlineKeyboardMarkup(keyboard))
 
 # ✅ Show Instruments
 async def show_sentiment_instruments(update, context):
     query = update.callback_query
     category = query.data
     instruments = instrument_map[category]
-
     keyboard = []
-    row = []
-    for idx, (symbol, label) in enumerate(instruments.items(), start=1):
-        row.append(InlineKeyboardButton(label, callback_data=f"get_sentiment|{category}|{symbol}"))
-        if idx % 5 == 0:
+
+    if category == "sentiment_metals":
+        # Gold first
+        keyboard.append([InlineKeyboardButton("🥇 Gold", callback_data="get_sentiment|sentiment_metals|XAU")])
+        remaining = {k: v for k, v in instruments.items() if k != "XAU"}
+        row = []
+        for idx, (symbol, label) in enumerate(remaining.items(), 1):
+            row.append(InlineKeyboardButton(label, callback_data=f"get_sentiment|{category}|{symbol}"))
+            if idx % 3 == 0:
+                keyboard.append(row)
+                row = []
+        if row:
             keyboard.append(row)
-            row = []
-    if row:
-        keyboard.append(row)
+    else:
+        row = []
+        for idx, (symbol, label) in enumerate(instruments.items(), 1):
+            row.append(InlineKeyboardButton(label, callback_data=f"get_sentiment|{category}|{symbol}"))
+            if idx % 4 == 0:
+                keyboard.append(row)
+                row = []
+        if row:
+            keyboard.append(row)
 
     keyboard.append([InlineKeyboardButton("⬅️ Back to Category", callback_data="vessa_ai_sentiment")])
-
-    await safe_replace_message(query, context, "📈 Choose an instrument:", InlineKeyboardMarkup(keyboard))
-
+    await safe_replace_message(query, context, "📈 *Choose an instrument:*", InlineKeyboardMarkup(keyboard))
 
 # ✅ Get Sentiment from API
 async def fetch_sentiment(update, context):
